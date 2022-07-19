@@ -1,0 +1,612 @@
+#+title: On Lisp
+#+subtitle: Advanced Techniques for Common Lisp
+#+author: Paul Graham
+#+date: 1993
+#+options: H:4
+
+* Preface
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+This  book  is intended  for  anyone  who wants  to  become  a better  Lisp
+programmer.  It assumes  some familiarity  with Lisp,  but not  necessarily
+extensive programming experience.
+
+It's difficult to convey the essence of a programming language in one
+sentence, but John Foderaro has come close:
+
+#+begin_quote
+Lisp is a programmable programming language.
+#+end_quote
+
+There is more to Lisp than this, but the ability to bend Lisp to one's will
+is a large part of what distinguishes a Lisp expert from a novice.
+
+** Bottom-Up Design
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+As well  as writing their  programs down toward the  language, /experienced
+Lisp programmers build  the language up toward their  programs/.  This book
+teaches  how  to  program  in  the *bottom-up  style*  for  which  Lisp  is
+inherently well-suited.
+
+_Bottom-up  design_  is  becoming  more  important  as  software  grows  in
+complexity.
+
+Programs today may have to meet specifications which are extremely complex,
+or  even open-ended.  Under  such circumstances,  the traditional  top-down
+method sometimes breaks down.
+
+In its place there has evolved a style of programming quite different from
+what is currently taught in most computer science courses:
+
+a *bottom-up style* in which /a program  is written as a series of layers/,
+each one acting as a sort of programming language for the one above.
+
+- X Windows; and
+- TeX
+
+are examples of programs written in this style.
+
+** The Theme of this Book: Bottom-Up Programming
+
+The theme of this book is twofold:
+
+1.  Lisp is  a  natural language  for programs  written  in the  *bottom-up
+   style*, and
+2. the *bottom-up style* is a natural way to write Lisp programs.
+
+
+_/On Lisp/_ will thus be of interest to two classes of readers.
+
+1. For people  interested in writing /extensible programs/,  this book will
+   show what you can do if you have the right language.
+2. For Lisp programmers, this book offers a practical explanation of how to
+   use Lisp to its best advantage.
+
+
+The title is  intended to stress the importance  of *bottom-up programming*
+in Lisp. Instead of just writing your program /in/ Lisp, you can write your
+own language /on/ Lisp, and write your program in that.
+
+It is possible  to write programs *bottom-up* in any  language, but Lisp is
+the  most  natural  vehicle  for  this  style  of  programming.   In  Lisp,
+*bottom-up design* is not a  special technique reserved for unusually large
+or difficult  programs. Any substantial  program will be written  partly in
+this style.
+
+Lisp was meant from the start  to be an /extensible language/. The language
+itself is mostly a collection of Lisp functions, no different from the ones
+you  define yourself.   What's more,  Lisp  functions can  be expressed  as
+lists,  which are  Lisp data  structures.  This  means you  can write  Lisp
+functions which generate Lisp code.
+
+** Using Macros for Bottom-Up Programming
+
+A  good  Lisp   programmer  must  know  how  to  take   advantage  of  this
+possibility. The  usual way  to do  so is  by defining  a kind  of operator
+called a /macro/.   Mastering macros is one of the  most important steps in
+moving from writing correct Lisp programs to writing beautiful ones.
+
+One of  the aims of this  book is to collect  in one place all  that people
+have till now had to learn from experience about macros.
+
+Understandably, introductory  Lisp books  do not emphasize  the differences
+between Lisp and other languages.  They have to get their message across to
+students who have, for the most part, been schooled to think of programs in
+Pascal terms.  It would only confuse matters to explain that, while ~defun~
+looks like a procedure definition, it is actually
+
+#+begin_quote
+a program-writing  program that  generates code  which builds  a functional
+object and indexes it under the symbol given as the first argument.
+#+end_quote
+
+** A Purpose of the Book: Explain What Makes Lisp Differernt
+
+One of the purposes of this book is to explain what makes Lisp different
+from other languages.
+
+- When I  began, I knew  that, all other things  being equal, I  would much
+  rather write programs in Lisp than in C or Pascal or Fortran.
+- I knew also that this was not merely a question of taste.
+- But I  realized that if I  was actually going  to claim that Lisp  was in
+  some ways a better language, I had better be prepared to explain why.
+
+
+When someone asked  Louis Armstrong what jazz was, he  replied "If you have
+to ask what jazz is, you'll never know."  But he did answer the question in
+a way: he showed people what jazz was.
+
+That's one way to explain the power of Lisp --- to demonstrate techniques
+that would be difficult or impossible in other languages.  Most books on
+programming --- even books on Lisp programming --- deal with the kinds of
+programs you could write in any language.
+
+On Lisp deals mostly with the kinds of programs you could only write in
+Lisp.
+- Extensibility,
+- bottom-up programming,
+- interactive development,
+- source code transformation,
+- embedded languages
+
+
+this is where Lisp shows to advantage.
+
+** The Plan of the Book
+
+*** Functions
+
+Since functions are the foundation of Lisp programs, the book begins with
+several chapters on functions.
+
+**** Chapter 2: Lisp Functions and their Possibilities
+
+Chapter 2 explains what Lisp functions are and the possibilities they
+offer.
+
+**** Chapter 3: Functional Programming
+
+Chapter  3 then  discusses the  advantages of  functional programming,  the
+dominant style in Lisp programs.
+
+**** Chapter 4: Use Functions to Extend Lisp
+
+Chapter 4 shows how to use functions to extend Lisp.
+
+**** Chapter 5: Abstractions Defined with Functions that Return Functions
+
+Then Chapter  5 suggests the new  kinds of abstractions we  can define with
+functions that return other functions.
+
+**** Chapter 6: Funtions In Place of Traditional Data Structures
+
+Chapter  6  shows  how  to  use functions  in  place  of  traditional  data
+structures.
+
+*** Macros
+
+The remainder  of the book  deals more  with macros than  functions. Macros
+receive more attention partly because there  is more to say about them, and
+partly because they have not till now been adequately described in print.
+
+**** Chapters 7-10: Complete Tutorial on Macro Technique
+
+Chapters 7--10 form a complete tutorial on macro technique.  By the end of
+it you will know most of what an experienced Lisp programmer knows about
+macros:
+
+- how they work;
+- how to define, test, and debug them;
+- when to use macros and when not;
+- the major types of macros;
+- how to write programs which generate macro expansions;
+- how macro style differs from Lisp style in general; and
+- how to detect and cure each of the unique problems that afflict macros.
+
+
+**** Chapters 11-18: Making Powerful Abstractions with Macros
+
+Following this tutorial, Chapters 11--18 show some of the powerful abstrac-
+tions you can build with macros.
+
+**** Chapter 11: How to Write Classic Macros
+
+Chapter 11 shows how to write the classic macros---those which create
+context, or implement loops or conditionals.
+
+**** Chapter 12: The Role of Macros in Operations on Generalized Variables
+
+Chap- ter 12 explains the role of macros in operations on generalized
+variables.
+
+**** Chapter 13: How Macros Make Programs Run Faster
+
+Chap- ter 13 shows how macros can make programs run faster by shifting
+computation to compile-time.
+
+**** Chapter 14: Anorphic Macros
+
+Chapter 14 introduces anaphoric macros, which allow you to use pronouns in
+your programs.
+
+**** Chapter 15: How Macros Provide a More Convenient Interface
+
+Chapter 15 shows how macros provide a more convenient interface to the
+function-builders defined in Chapter 5.
+
+**** Chapter 16: How to Use Macro-Defining Macros
+
+Chapter 16 shows how to use macro-defining macros to make Lisp write your
+programs for you.
+
+**** Chapter 17: Read Macros
+
+Chapter 17 discusses read-macros.
+
+**** Chapter 18: Macros for Destructuring
+
+Chapter 18 discusses macros for destructuring.
+
+*** Embedded Languages
+
+With Chapter 19 begins the fourth part of the book, devoted to embedded
+languages.
+
+**** Chapter 19: Introduction to Embedded Languages
+
+Chapter 19 introduces the subject by showing the same program, a program to
+answer queries on a database, implemented first by an interpreter and then
+as a true embedded language.
+
+**** Chapter 20: The Notion of a Continuation
+
+Chapter 20 shows how to introduce into Common Lisp programs the notion of a
+continuation, an object representing the remainder of a computation.
+Continuations are a very powerful tool, and can be used to implement both
+multiple processes and nondeterministic choice.
+
+**** Chapters 21 and 22: Embedding Continuations into Common Lisp
+
+Embedding these control structures in Lisp is discussed in Chapters 21 and
+22, respectively.  Nondeterminism, which allows you to write programs as if
+they had foresight, sounds like an abstraction of unusual power.
+
+**** Chapter 23 and 24: Presentation of Two Embedded Languages
+
+Chapters 23 and 24 present two embedded languages which show that
+nondeterminism lives up to its promise:
+- a complete ATN parser and
+- an embedded Prolog which combined total about 200 lines of code.
+
+
+The fact that these programs are short means nothing in itself.  If you resorted to
+writing incomprehensible code, there's no telling what you could do in 200
+lines.  The point is, these programs are not short because they depend on
+programming tricks, but because they're written using Lisp the way it's
+meant to be used.
+
+The point of Chapters 23 and 24 is not how to implement ATNs in one page of
+code or Prolog in two, but to show that these programs, when given their
+most natural Lisp implementation, simply are that short.  The embedded
+languages in the latter chapters provide a proof by example of the twin
+points with which I began:
+
+#+begin_quote
+- that Lisp is a natural language for *bottom-up design*, and
+- that *bottom-up design* is a natural way to use Lisp. 
+#+end_quote
+
+*** Object-Oriented Programming
+
+The book concludes with a discussion of object-oriented programming, and
+particularly CLOS, the Common Lisp Object System.  By saving this topic
+till last, we see more clearly the way in which object-oriented programming
+is an extension of ideas already present in Lisp.  It is one of the many
+abstractions that can be built /o/n Lisp.
+
+* The Extensible Language
+
+Instead of judging Lisp by the company it keeps, let's look at the language
+itself. What can you do in Lisp that you can't do in other languages?
+
+One of  *the most  distinctive qualities  of Lisp*  is _the  way it  can be
+tailored to suit  the program being written  in it_. Lisp itself  is a Lisp
+program, and Lisp  programs can be expressed as lists,  which are Lisp data
+structures.   Together, these  two principles  mean that  any user  can add
+operators  to Lisp  which are  indistinguishable  from the  ones that  come
+built-in.
+
+** Design by Evolution
+
+Because Lisp  gives you the freedom  to define your own  operators, you can
+mold it into just the language you need.
+
+And if you're not sure what kind of program you're writing, it's a safe bet
+to write it in Lisp.  Whatever kind  of program yours turns out to be, Lisp
+will, during  the writing of it,  have evolved into a  language for writing
+that kind of program.
+
+*** Failure of the Plan-and-Implement Model
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+If you're not  sure yet what kind  of program you're writing?  To some ears
+that sentence  has an  odd ring  to it. It  is in  jarring contrast  with a
+certain model  of doing things wherein  you (1) carefully plan  what you're
+going  to  do, and  then  (2)  do it.  According  to  this model,  if  Lisp
+encourages you to  start writing your program before you've  decided how it
+should work, it merely encourages sloppy thinking.
+
+Well, it  just ain't so.  The *plan-and-implement  method* may have  been a
+good way  of building dams or  launching invasions, but experience  has not
+shown  it to  be as  good a  way of  writing programs.   Why? Perhaps  it's
+because computers are so exacting.  Perhaps there is more variation between
+programs  than there  is between  dams or  invasions.  Or  perhaps the  old
+methods don't work  because old concepts of redundancy have  no analogue in
+software development:  if a dam  contains 30%  too much concrete,  that's a
+margin for  error, but  if a  program does 30%  too much  work, that  is an
+error.
+
+It may be difficult to say why the old method fails, but that it does fail,
+anyone can see. When is software delivered on time? Experienced programmers
+know that no matter how carefully you plan a program, when you write it the
+plans will turn out to be imperfect  in some way.  Sometimes the plans will
+be hopelessly  wrong.  Yet  few of the  victims of  the *plan-and-implement
+method* question its  basic soundness.  Instead they  blame human failings:
+if only the plans had been made with more foresight, all this trouble could
+have been avoided.  Since even the  very best programmers run into problems
+when they turn to implementation, perhaps it's too much to hope that people
+will ever have that much foresight. Perhaps the *plan-and-implement method*
+could be replaced with another approach which better suits our limitations.
+
+*** Superiority of the Bottom-Up Model
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+We  can approach  programming in  a  different way,  if we  have the  right
+tools. Why do we plan before implementing? The big danger in plunging right
+into  a project  is the  possibility that  we will  paint ourselves  into a
+corner. If we  had a more flexible language, could  this worry be lessened?
+We do, and it is. The flexibility of  Lisp has spawned a whole new style of
+programming. In  Lisp, you can  do much of your  planning as you  write the
+program.
+
+The  ability  to  plan  programs  as  you  write  them  has  two  momentous
+consequences: programs take  less time to write, because when  you plan and
+write at the  same time, you have  a real program to  focus your attention;
+and they turn out  better, because the final design is  always a product of
+evolution. So long as you maintain a certain discipline while searching for
+your program's destiny-so long as you always rewrite mistaken parts as soon
+as  it becomes  clear that  they're mistaken-the  final product  will be  a
+program more elegant than if you had spent weeks planning it beforehand.
+
+** Programming Bottom-Up
+
+It's a  long-standing principle  of programming  style that  the functional
+elements of  a program  should not  be too  large. If  some component  of a
+program  grows  beyond the  stage  where  it's readily  comprehensible,  it
+becomes a mass of complexity which conceals  errors as easily as a big city
+conceals fugitives. Such  software will be hard to read,  hard to test, and
+hard to debug.
+
+*** Top-Down Design
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+In accordance  with this principle,  a large  program must be  divided into
+pieces, and the larger the program, the more it must be divided. How do you
+divide a program?  The traditional approach is called  top-down design: you
+say "the purpose of the program is to do these seven things, so I divide it
+into seven  major subroutines. The  first subroutine  has to do  these four
+things,  so it  in turn  will have  four of  its own  subroutines," and  so
+on. This process  continues until the whole program has  the right level of
+granularity-each part large  enough to do something  substantial, but small
+enough to be understood as a single unit.
+
+*** Bottom-Up Design
+:PROPERTIES:
+:UNNUMBERED: t
+:END:
+
+Experienced Lisp programmers divide up  their programs differently. As well
+as  top-down  design,  they  follow  a  principle  which  could  be  called
+*bottom-up  design*--- /changing  the language  to suit  the problem/.
+
+In Lisp,  you don't just write  your program down toward  the language, you
+also /build  the language  up toward  your program/.
+
+As you're writing a  program you may think "I wish  Lisp had such- and-such
+an operator."   So you go and  write it.  Afterward you  realize that using
+the new operator would simplify the  design of another part of the program,
+and so  on. Language and program  evolve together. Like the  border between
+two warring states, the boundary between  language and program is drawn and
+redrawn, until eventually it comes to  rest along the mountains and rivers,
+the natural frontiers  of your problem.  In the end  your program will look
+as if the language had been designed for it.  And when language and program
+fit one  another well,  you end  up with  code which  is clear,  small, and
+efficient.
+
+It's worth  emphasizing that *bottom-up  design* doesn't mean  just writing
+the  same program  in a  different order.  When you  work *bottom-up*,  you
+usually end  up with a different  program. Instead of a  single, monolithic
+program, you will get a larger language with more abstract operators, and a
+smaller program written in it. Instead of a lintel, you'll get an arch.
+
+In  typical  code,  once  you  abstract out  the  parts  which  are  merely
+bookkeeping,  what's left  is much  shorter; the  higher you  build up  the
+language, the less  distance you will have  to travel from the  top down to
+it. This brings several advantages:
+
+1. *Smaller Programs* By making the language do more of the work, bottom-up
+   design  yields programs  which are  smaller and  more agile.   A shorter
+   program doesn't  have to be divided  into so many components,  and fewer
+   components  means programs  which are  easier to  read or  modify. Fewer
+   components  also means  fewer connections  between components,  and thus
+   less chance for  errors there. As industrial designers  strive to reduce
+   the number  of moving parts  in a machine, experienced  Lisp programmers
+   use  bottom-up  design  to  reduce  the size  and  complexity  of  their
+   programs.
+
+2. *Code Reuse* Bottom-up design promotes  code re-use.  When you write two
+   or more programs, many of the  utilities you wrote for the first program
+   will also be useful in the succeeding ones. Once you've acquired a large
+   substrate of utilities,  writing a new program can take  only a fraction
+   of the effort it would require if you had to start with raw Lisp.
+
+3. *Code that is Easier to  Read* Bottom-up design makes programs easier to
+   read.  An instance  of  this  type of  abstraction  asks  the reader  to
+   understand  a  general-purpose  operator;   an  instance  of  functional
+   abstraction asks the reader to understand a special- purpose subroutine.
+
+4. *Code is Clearer* Because it causes  you always to be on the lookout for
+   patterns in  your code,  working bottom-up helps  to clarify  your ideas
+   about  the design  of  your program.   If two  distant  components of  a
+   program are similar in form, you'll  be led to notice the similarity and
+   perhaps to redesign the program in a simpler way.
+
+
+*Bottom-up design* is possible to a  certain degree in languages other than
+Lisp.    Whenever  you   see   library  functions,   bottom-up  design   is
+happening. However, Lisp gives you  much broader powers in this department,
+and augmenting  the language  plays a proportionately  larger role  in Lisp
+style---so much so that Lisp is not  just a different language, but a whole
+different way of programming.
+
+*The Power  of Small Groups*  It's true that  this style of  development is
+better suited to programs which can  be written by *small groups*. However,
+at the  same time, it extends  the limits of what  can be done by  a *small
+group*.  In  /The Mythical Man-Month/,  Frederick Brooks proposed  that the
+productivity of  a group  of programmers  does not  grow linearly  with its
+size. As  the size of the  group increases, the productivity  of individual
+programmers goes down.  The experience  of Lisp programming suggests a more
+cheerful way to phrase  this law: /as the size of  the group decreases, the
+productivity  of individual  programmers  goes up/.   A  small group  wins,
+relatively speaking, simply because it's  smaller.  When a small group also
+takes advantage  of the  techniques that  Lisp makes  possible, it  can win
+outright.
+
+** Extensible Software
+
+The *Lisp  style of  programming* is  one that has  grown in  importance as
+software has grown  in complexity.  Sophisticated users now  demand so much
+from  software that  we can't  possibly anticipate  all their  needs.  They
+themselves can't  anticipate all their  needs.  But  if we can't  give them
+software which does everything they want right out of the box, *we can give
+them software which is extensible*. /We  transform our software from a mere
+program into a programming language/, and  advanced users can build upon it
+the extra features that they need.
+
+*Bottom-up design* leads naturally  to *extensible programs*.
+
+- The *simplest  bottom-up programs*  consist of  two layers:  language and
+  program.
+- *Complex programs* may be written as  a series of layers, each one acting
+  as a programming language for the one above.
+- If this philosophy is  carried all the way up to  the topmost layer, that
+  layer becomes *a programming language* for the user.
+- Such a program,  where extensibility permeates every level,  is likely to
+  make a much  better programming language than a system  which was written
+  as a traditional black box, and then made extensible as an afterthought.
+
+
+** Extending Lisp
+
+There are two ways  to add new operators to Lisp:  functions and macros. In
+Lisp, functions  you define have the  same status as the  built-in ones. If
+you want a  new variant of mapcar,  you can define one yourself  and use it
+just as you would use mapcar.
+
+*Defining functions* is comparatively  straightforward.  *Macros* provide a
+more   general,   but  less   well-understood,   means   of  defining   new
+operators. Macros  are programs  that write  programs.  This  statement has
+far-reaching implications, and  exploring them is one of  the main purposes
+of this book.
+
+*The  thoughtful use  of macros*  leads to  programs which  are marvels  of
+clarity and elegance. These gems are  not to be had for nothing. Eventually
+macros will seem the most natural thing  in the world, but they can be hard
+to understand at  first. Partly this is because they  are more general than
+functions, so there is more to keep in mind when writing them. But the main
+reason macros  are hard to understand  is that they're foreign.   /No other
+language has  anything like  Lisp macros/. Thus  learning about  macros may
+entail  unlearning  preconceptions  inadvertently   picked  up  from  other
+languages. Foremost  among these is  the notion  of a program  as something
+afflicted  by  rigor mortis.   Why  should  data  structures be  fluid  and
+changeable,  but  programs  not?   In  Lisp, programs  are  data,  but  the
+implications of this fact take a while to sink in.
+
+If  it takes  some  time  to get  used  to macros,  it  is  well worth  the
+effort. Even  in such mundane uses  as iteration, macros can  make programs
+significantly smaller and cleaner.
+
+*Embedded Languages* You're  not limited to extending Lisp  one function or
+macro at a time.  If you need to,  you can build a whole language on top of
+Lisp, and write  your programs in that.  Lisp is  an excellent language for
+writing compilers and interpreters, but it offers another way of defining a
+new language which  is often more elegant and certainly  much less work: to
+define the new language as a modification  of Lisp.  Then the parts of Lisp
+which can appear unchanged in the new language (e.g. arithmetic or I/O) can
+be used as is, and you only have to implement the parts which are different
+(e.g. control structure).  A language implemented  in this way is called an
+*embedded language*.
+
+Embedded languages are a natural outgrowth of bottom-up programming. Common
+Lisp includes several already. The most  famous of them, CLOS, is discussed
+in the  last chapter. But  you can define  embedded languages of  your own,
+too. You can have the language which suits your program, even if it ends up
+looking quite different from Lisp.
+
+** Why Lisp (Or When)
+
+These new possibilities do not stem from a single magic ingredient. In this
+respect, Lisp is like an arch. Which of the wedge-shaped stones (voussoirs)
+is the one  that holds up the  arch? The question itself  is mistaken; they
+all do. Like an arch, Lisp is a collection of interlocking features. We can
+list  some  of  these  features-
+- dynamic  storage  allocation  and  garbage collection,
+- runtime typing,
+- functions as objects,
+- a  built-in parser which generates lists,
+- a  compiler which accepts programs expressed  as lists,
+- an interactive environment,
+- and  so on-
+
+
+but the power  of Lisp cannot be traced  to any single one of  them.  It is
+the combination which makes Lisp programming what it is.
+
+Over the  past twenty years,  the way people  program has changed.  Many of
+these    changes-interactive    environments,   dynamic    linking,    even
+object-oriented  programming-have been  piecemeal  attempts  to give  other
+languages  some of  the  flexibility  of Lisp.  The  metaphor  of the  arch
+suggests how well they have succeeded.
+
+It is widely known that Lisp and Fortran are the two oldest languages still
+in use.  What is perhaps more  significant is that they  represent opposite
+poles in the philosophy of language  design. Fortran was invented as a step
+up from assembly  language. Lisp was invented as a  language for expressing
+algorithms.   Such   different    intentions   yielded   vastly   different
+languages. Fortran makes life easy for the compiler writer; Lisp makes life
+easy  for the  programmer.  Most programming  languages  since have  fallen
+somewhere between  the two  poles. Fortran and  Lisp have  themselves moved
+closer to the center. Fortran now looks more like Algol, and Lisp has given
+up some of the wasteful habits of its youth.
+
+The original  Fortran and Lisp defined  a sort of battlefield.  On one side
+the  battle cry  is "Efficiency!  (And  besides, it  would be  too hard  to
+implement.)"  On the  other  side,  the battle  cry  is "Abstraction!  (And
+anyway, this isn't production software.)"  As the gods determined from afar
+the  outcomes of  battles among  the ancient  Greeks, the  outcome of  this
+battle is being determined by hardware.  Every year, things look better for
+Lisp. The arguments  against Lisp are now starting to  sound very much like
+the arguments  that assembly  language programmers gave  against high-level
+languages in the  early 1970s. The question is now  becoming not Why Lisp?,
+but When?
+
+* Functions
+
+* Functional Programming
+
+* Utility Functions
+
+* Returning Functions
+
+* Functions as Representation
+
+* Macros
+
+Lisp's macro facility allows you to define operators that are implemented
+by transformation.  The definition of a macro is essentially a function
+that generates Lisp code --- a program that writes programs.
+
+# Local Variables:
+# fill-column: 75
+# End:
